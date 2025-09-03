@@ -11,20 +11,21 @@ export function EditProduct({ id }: { id: string }) {
     const {current, status } = useAppSelector(state => state.products);
     const router = useRouter();
     const [title, setTitle] = useState('');
-
     const numericId = Number(id);
-    if (isNaN(numericId)) {
-        return <p>Invalid product ID</p>
-    }
 
-    useEffect(  () => {
-        dispatch(fetchProductById(Number(numericId)))
+useEffect(() => {
+  if (!isNaN(numericId)) {
+    dispatch(fetchProductById(numericId));
+    return () => {
+      dispatch(clearCurrent());
+    };
+  }
+}, [numericId]);
 
-        return () => {
-            dispatch(clearCurrent())
-        }
+if (isNaN(numericId)) {
+  return <p>Invalid product ID</p>;
+}
 
-    }, [id]);
 
     useEffect(() => {
         if (current) {
