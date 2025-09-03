@@ -1,0 +1,52 @@
+'use client';
+
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useRouter } from "next/navigation";
+import { clearCurrent, fetchProductById, updateProduct } from "@/store/productSlice";
+
+export function EditProduct({ id }: { id: string }) {
+    
+    const dispatch = useAppDispatch();
+    const {current, status } = useAppSelector(state => state.products);
+    const router = useRouter();
+    const [title, setTitle] = useState('');
+
+    const numericId = Number(id);
+    if (isNaN(numericId)) {
+        return <p>Invalid product ID</p>
+    }
+
+    useEffect(  () => {
+        dispatch(fetchProductById(Number(numericId)))
+
+        return () => {
+            dispatch(clearCurrent())
+        }
+
+    }, [id]);
+
+    useEffect(() => {
+        if (current) {
+            setTitle(current.title);
+        }
+    }, [current]);
+
+
+    if(status === 'loading' || !current) return <p>Loading...</p>
+ 
+    const handleSave = async () => {
+        const res = await dispatch(updateProduct({ id: current.id, title })).unwrap();
+        console.log(res);
+        router.push(`/products/${current.id}`);
+    };
+
+
+  return (
+      <div>
+          <label htmlFor="title">Product Title: </label>
+          <input type="text" id="title" value={title} onChange={e => setTitle(e.target.value)} />
+          <button onClick={handleSave}>SAVE</button>
+      </div>
+  )
+}

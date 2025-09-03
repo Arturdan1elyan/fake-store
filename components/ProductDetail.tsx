@@ -49,7 +49,7 @@ export function ProductDetail({ id }: { id: string }) {
       />
       <p className="italic text-xl mt-2 text-center">{current.title}</p>
       <p className="font-bold text-center text-red-600">{current.price} $</p>
-      <button className=" w-44 h-12 rounded-2xl text-blue-400 border-solid border-2 border-blue-400 text-3xl cursor-pointer hover:scale-105 active:scale-100 transition-transform duration-300" onClick={() => router.push(`products/${id}/edit`)}>edit</button>
+      <button className=" w-44 h-12 rounded-2xl text-blue-400 border-solid border-2 border-blue-400 text-3xl cursor-pointer hover:scale-105 active:scale-100 transition-transform duration-300" onClick={() => router.push(`${id}/edit`)}>edit</button>
       <button className=" w-44 h-12 rounded-2xl text-white text-3xl  bg-blue-400 cursor-pointer hover:scale-105 active:scale-100 transition-transform duration-300" onClick={handleDelete}>delete</button>
     </div>
   );
