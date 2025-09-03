@@ -18,29 +18,32 @@ export function Products() {
     }
   }, [dispatch, status]);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("show");
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    itemsRef.current.forEach((item) => {
-      if (item) observer.observe(item);
-    });
-
-    return () => {
-      itemsRef.current.forEach((item) => {
-        if (item) observer.unobserve(item);
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+          obs.unobserve(entry.target);
+        }
       });
-    };
-  }, [list]);
+    },
+    { threshold: 0.5 }
+  );
+
+  const currentItems = [...itemsRef.current]; 
+
+  currentItems.forEach((item) => {
+    if (item) observer.observe(item);
+  });
+
+  return () => {
+    currentItems.forEach((item) => {
+      if (item) observer.unobserve(item);
+    });
+  };
+}, [list]);
+
 
   if (status === "loading") return <p>Loading...</p>;
   if (status === "failed") return <p>Error: {error}</p>;
